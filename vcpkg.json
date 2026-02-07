@@ -1,0 +1,6 @@
+{
+  "name": "reader",
+  "dependencies": [
+    "boost-test"
+  ]
+}
