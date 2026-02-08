@@ -14,7 +14,7 @@ This program has a command-line interface. Assuming the name of the compiled exe
 ./readpars
 ```
 
-Note that there is no input to this example use case.
+There is no argument to be passed to the program through the command line, but the program will expect the file `parameters.txt` to be present in the working directory, with the following parameters: `ngenes`, `mutrate`, `noise`, and `genes` (see [main page](../README.md) of the documentation).
 
 ### Output
 

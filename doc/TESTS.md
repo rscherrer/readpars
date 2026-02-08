@@ -133,9 +133,8 @@ This setup has the advantage of integrating with CMake and working well across p
 Then, run:
 
 ```shell
-mkdir build
+cmake -S . -B build
 cd build
-cmake ..
 cmake --build .
 ```
 
@@ -148,7 +147,6 @@ Simply run those executables to run the tests. For example:
 ```shell
 cd bin/tests
 ./tests
-./individual_tests
 ```
 
 ### Note
