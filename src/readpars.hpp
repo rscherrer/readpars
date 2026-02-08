@@ -7,6 +7,8 @@
 // You must retain the copyright notice and license text in copies 
 // or substantial portions of the code. See LICENSE file for details.
 
+// URL: https://github.com/rscherrer/readpars
+
 #ifndef READPARS_READPARS_HPP
 #define READPARS_READPARS_HPP
 
