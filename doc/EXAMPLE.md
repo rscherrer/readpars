@@ -1,6 +1,6 @@
 ## Minimal example
 
-Here we go over our minimal example setup used to showcase the workings of the library.
+The main source file `main.cpp` implements an example program showcasing the workings of the library.
 
 ### Installation
 
@@ -14,11 +14,13 @@ This program has a command-line interface. Assuming the name of the compiled exe
 ./readpars
 ```
 
-There is no argument to be passed to the program through the command line, but the program will expect the file `parameters.txt` to be present in the working directory, with the following parameters: `ngenes`, `mutrate`, `noise`, and `genes` (see [main page](../README.md) of the documentation).
+There is no argument to be passed to the program through the command line, but the program will expect the file `parameters.txt` to be present in the working directory, with the following parameters: `ngenes`, `mutrate`, `noise`, and `genes`. This file is provided in the root folder of this repository - simply move it to the working directory where the program is called from. 
+
+(Note that the featuring of parameter `ngenes` before `genes` in the example is important, as `ngenes` indicates how many `genes` there are to read in `parameters.txt`.)
 
 ### Output
 
-The above command will output to the screen some example values read from a mock parameter file.
+The above command will output to the screen some example values read from the mock parameter file.
 
 ### Tests
 
