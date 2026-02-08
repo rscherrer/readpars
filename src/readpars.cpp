@@ -7,6 +7,8 @@
 // You must retain the copyright notice and license text in copies 
 // or substantial portions of the code. See LICENSE file for details.
 
+// URL: https://github.com/rscherrer/readpars
+
 // Source code of the ReadPars class.
 
 #include "readpars.hpp"
