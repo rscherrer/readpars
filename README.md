@@ -1,4 +1,4 @@
-# readpars
+# ReadPars: Simple C++ library to read parameter text files
 
 This repository contains the code for a C++ library that may be used for reading parameter files into simulation programs, as well as a minimal example setup to illustrate how the library may be incorporated in a C++ project.
 
