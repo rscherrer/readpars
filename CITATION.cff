@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+
+authors:
+  - family-names: Scherrer
+    given-names: Raphaël
+    orcid: https://orcid.org/0000-0002-1447-7630
+
+title: "ReadPars: Simple C++ library to read parameter text files"
+date-released: 2026-02-08
+
+repository-code: https://github.com/rscherrer/readpars
+license: MIT
