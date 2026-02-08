@@ -1,3 +1,12 @@
+// ReadPars: Simple C++ library to read parameter text files
+
+// Copyright (c) 2025-2026, Raphaël Scherrer
+// This code is shared under the MIT License. You are free
+// to use, copy, modify, merge, publish, distribute, sublicense,
+// and/or sell copies of it, subject to the terms of the license.
+// You must retain the copyright notice and license text in copies 
+// or substantial portions of the code. See LICENSE file for details.
+
 // Source code of the ReadPars class.
 
 #include "readpars.hpp"
