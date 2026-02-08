@@ -4,7 +4,7 @@
 // Here we test the parameter reading utilties
 
 #include "testutils.hpp"
-#include "../src/reader.hpp"
+#include "../src/readpars.hpp"
 #include <boost/test/unit_test.hpp>
 
 // Test that a reader initializes properly
@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_CASE(readerInitilization) {
     tst::write("parameters.txt", "nloci 10\npopsize 10");
 
     // Create a reader
-    Reader reader("parameters.txt");
+    ReadPars reader("parameters.txt");
 
     // Check elements
     BOOST_CHECK_EQUAL(reader.isopen(), false);
@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(readerOpen) {
     tst::write("parameters.txt", "nloci 10\npopsize 10");
 
     // Create a reader
-    Reader reader("parameters.txt");
+    ReadPars reader("parameters.txt");
 
     // Open the file
     reader.open();
@@ -61,7 +61,7 @@ BOOST_AUTO_TEST_CASE(readerOpen) {
 BOOST_AUTO_TEST_CASE(readerErrorFileNotFound) {
 
     // Create a reader
-    Reader reader("nonexistent.txt");
+    ReadPars reader("nonexistent.txt");
 
     // Check that it throws an error
     tst::checkError([&]() { reader.open(); }, "Unable to open file nonexistent.txt");
@@ -75,7 +75,7 @@ BOOST_AUTO_TEST_CASE(readerErrorEmptyFile) {
     tst::write("empty.txt", "");
 
     // Create a reader
-    Reader reader("empty.txt");
+    ReadPars reader("empty.txt");
 
     // Check that it throws an error
     tst::checkError([&]() { reader.open(); }, "File empty.txt is empty");
@@ -92,7 +92,7 @@ BOOST_AUTO_TEST_CASE(readerClose) {
     tst::write("parameters.txt", "nloci 10\npopsize 10");
 
     // Create a reader
-    Reader reader("parameters.txt");
+    ReadPars reader("parameters.txt");
 
     // Open the file
     reader.open();
@@ -118,7 +118,7 @@ BOOST_AUTO_TEST_CASE(readerReadLine) {
     tst::write("parameters.txt", "nloci 10\npopsize 10");
 
     // Create a reader
-    Reader reader("parameters.txt");
+    ReadPars reader("parameters.txt");
 
     // Open the file
     reader.open();
@@ -163,7 +163,7 @@ BOOST_AUTO_TEST_CASE(readerEmptyLine) {
     tst::write("parameters.txt", "nloci 10\n\npopsize 10");
 
     // Create a reader
-    Reader reader("parameters.txt");
+    ReadPars reader("parameters.txt");
 
     // Open the file
     reader.open();
@@ -204,7 +204,7 @@ BOOST_AUTO_TEST_CASE(readerCommentLine) {
     tst::write("parameters.txt", "# This is a comment\npopsize 10");
 
     // Create a reader
-    Reader reader("parameters.txt");
+    ReadPars reader("parameters.txt");
 
     // Open the file
     reader.open();
@@ -238,7 +238,7 @@ BOOST_AUTO_TEST_CASE(readerErrorReadName) {
     tst::write("parameters.txt", "hel\x01lo 10\npopsize 10");
 
     // Create a reader
-    Reader reader("parameters.txt");
+    ReadPars reader("parameters.txt");
 
     // Open the file
     reader.open();
@@ -261,7 +261,7 @@ BOOST_AUTO_TEST_CASE(readerErrorNoValue) {
     tst::write("parameters.txt", "nloci\npopsize 10");
 
     // Create a reader
-    Reader reader("parameters.txt");
+    ReadPars reader("parameters.txt");
 
     // Open the file
     reader.open();
@@ -284,7 +284,7 @@ BOOST_AUTO_TEST_CASE(readerReadValue) {
     tst::write("parameters.txt", "nloci 10\npopsize 10");
 
     // Create a reader
-    Reader reader("parameters.txt");
+    ReadPars reader("parameters.txt");
 
     // Open the file
     reader.open();
@@ -318,7 +318,7 @@ BOOST_AUTO_TEST_CASE(readerErrorNotJustOneValue) {
     tst::write("parameters.txt", "nloci 10 20\npopsize 10");
 
     // Create a reader
-    Reader reader("parameters.txt");
+    ReadPars reader("parameters.txt");
 
     // Open the file
     reader.open();
@@ -345,7 +345,7 @@ BOOST_AUTO_TEST_CASE(readerErrorReadValue) {
     tst::write("parameters.txt", "nloci \x10\npopsize 10");
 
     // Create a reader
-    Reader reader("parameters.txt");
+    ReadPars reader("parameters.txt");
 
     // Open the file
     reader.open();
@@ -375,8 +375,8 @@ BOOST_AUTO_TEST_CASE(readerErrorParseValue) {
     tst::write("parameters2.txt", "nloci hello\npopsize 10");
 
     // Create a reader
-    Reader r1("parameters1.txt");
-    Reader r2("parameters2.txt");
+    ReadPars r1("parameters1.txt");
+    ReadPars r2("parameters2.txt");
 
     // Open the file
     r1.open();
@@ -403,82 +403,6 @@ BOOST_AUTO_TEST_CASE(readerErrorParseValue) {
 
 }
 
-// Test that fails when values are invalid given provided criteria
-BOOST_AUTO_TEST_CASE(readerErrorInvalidValue) {
-
-    // Write a parameter file
-    tst::write("parameters1.txt", "hello -1\nhello -1\nhello -1");
-    tst::write("parameters2.txt", "hello 0\nhello 0\nhello 0\nhello 0");
-    tst::write("parameters3.txt", "hello 1.5");
-    tst::write("parameters4.txt", "hello 1001");
-    tst::write("parameters5.txt", "hello 0.00000000000000001");
-
-    // Note: We add multiple lines with the same parameters so we can call
-    // the reader functions on the same parameter file several times in
-    // a row to test various error messages.
-
-    // Create a reader
-    Reader r1("parameters1.txt");
-    Reader r2("parameters2.txt");
-    Reader r3("parameters3.txt");
-    Reader r4("parameters4.txt");
-    Reader r5("parameters5.txt");
-
-    // Open the file
-    r1.open();
-    r2.open();
-    r3.open();
-    r4.open();
-    r5.open();
-
-    // Read the first line
-    r1.readline();
-    r2.readline();
-    r3.readline();
-    r4.readline();
-    r5.readline();
-
-    // Prepare to read
-    size_t n = 0u;
-    double x = 0.0;
-
-    // Parameter file with a negative number
-    tst::checkError([&]() { r1.readvalue<double>(x, chk::positive<double>); }, "Parameter hello must be positive in line 1 of file parameters1.txt");
-    r1.readline();
-    tst::checkError([&]() { r1.readvalue<double>(x, chk::strictpos<double>); }, "Parameter hello must be strictly positive in line 2 of file parameters1.txt");
-    r1.readline();
-    tst::checkError([&]() { r1.readvalue<double>(x, chk::proportion<double>); }, "Parameter hello must be between 0 and 1 in line 3 of file parameters1.txt");
-    
-    // Parameter file with a zero
-    tst::checkError([&]() { r2.readvalue<double>(x, chk::strictpos<double>); }, "Parameter hello must be strictly positive in line 1 of file parameters2.txt");
-    r2.readline();
-    tst::checkError([&]() { r2.readvalue<size_t>(n, chk::strictpos<size_t>); }, "Parameter hello must be strictly positive in line 2 of file parameters2.txt");
-    r2.readline();
-    tst::checkError([&]() { r2.readvalue<size_t>(n, chk::onetothousand<size_t>); }, "Parameter hello must be between 1 and 1000 in line 3 of file parameters2.txt");
-    r2.readline();
-    tst::checkError([&]() { r2.readvalue<double>(x, chk::enoughmb<double>); }, "Parameter hello must be enough MB to store a double in line 4 of file parameters2.txt");
-
-    // Other parameter files
-    tst::checkError([&]() { r3.readvalue<double>(x, chk::proportion<double>); }, "Parameter hello must be between 0 and 1 in line 1 of file parameters3.txt");
-    tst::checkError([&]() { r4.readvalue<size_t>(n, chk::onetothousand<size_t>); }, "Parameter hello must be between 1 and 1000 in line 1 of file parameters4.txt");
-    tst::checkError([&]() { r5.readvalue<double>(x, chk::enoughmb<double>); }, "Parameter hello must be enough MB to store a double in line 1 of file parameters5.txt");
-
-    // Close the file
-    r1.close();
-    r2.close();
-    r3.close();
-    r4.close();
-    r5.close();
-
-    // Remove the file
-    std::remove("parameters1.txt");
-    std::remove("parameters2.txt");
-    std::remove("parameters3.txt");
-    std::remove("parameters4.txt");
-    std::remove("parameters5.txt");
- 
-}
-
 // Test that reading a vector of values works
 BOOST_AUTO_TEST_CASE(readerReadVector) {
 
@@ -486,7 +410,7 @@ BOOST_AUTO_TEST_CASE(readerReadVector) {
     tst::write("parameters.txt", "nloci 10 20 30\npopsize -1 -2 -3");
 
     // Create a reader
-    Reader reader("parameters.txt");
+    ReadPars reader("parameters.txt");
 
     // Open the file
     reader.open();
@@ -526,7 +450,7 @@ BOOST_AUTO_TEST_CASE(readerErrorTooManyValues) {
     tst::write("parameters.txt", "nloci 10 20 30 40\npopsize -1 -2 -3");
 
     // Create a reader
-    Reader reader("parameters.txt");
+    ReadPars reader("parameters.txt");
 
     // Open the file
     reader.open();
@@ -553,7 +477,7 @@ BOOST_AUTO_TEST_CASE(readerErrorTooFewValues) {
     tst::write("parameters.txt", "nloci 10 20\npopsize -1 -2 -3");
 
     // Create a reader
-    Reader reader("parameters.txt");
+    ReadPars reader("parameters.txt");
 
     // Open the file
     reader.open();
@@ -573,42 +497,6 @@ BOOST_AUTO_TEST_CASE(readerErrorTooFewValues) {
  
 }
 
-// Test that error when values are not in strict order
-BOOST_AUTO_TEST_CASE(readerErrorInvalidOrder) {
-
-    // Write a parameter file
-    tst::write("parameters1.txt", "nloci 30 10 20\npopsize -1 -2 -3");
-    tst::write("parameters2.txt", "nloci 1 1 3\npopsize -1 -2 -3");
-
-    // Create a reader
-    Reader r1("parameters1.txt");
-    Reader r2("parameters2.txt");
-
-    // Open the file
-    r1.open();
-    r2.open();
-
-    // Read the first line
-    r1.readline();
-    r2.readline();
-
-    // Prepare
-    std::vector<size_t> nloci;
-
-    // Check
-    tst::checkError([&]() { r1.readvalues<size_t>(nloci, 3u, nullptr, chk::strictorder<size_t>); }, "Parameter nloci must be in strictly increasing order in line 1 of file parameters1.txt");
-    tst::checkError([&]() { r2.readvalues<size_t>(nloci, 3u, nullptr, chk::strictorder<size_t>); }, "Parameter nloci must be in strictly increasing order in line 1 of file parameters2.txt");
-
-    // Close the file
-    r1.close();
-    r2.close();
-
-    // Remove the file
-    std::remove("parameters1.txt");
-    std::remove("parameters2.txt");
- 
-}
-
 // Test of throwing an invalid parametr error
 BOOST_AUTO_TEST_CASE(readerErrorInvalidParameter) {
 
@@ -616,7 +504,7 @@ BOOST_AUTO_TEST_CASE(readerErrorInvalidParameter) {
     tst::write("parameters.txt", "nloci 10\npopsize 10");
 
     // Create a reader
-    Reader reader("parameters.txt");
+    ReadPars reader("parameters.txt");
 
     // Open the file
     reader.open();
@@ -633,4 +521,65 @@ BOOST_AUTO_TEST_CASE(readerErrorInvalidParameter) {
     // Remove the file
     std::remove("parameters.txt");
  
-}  
+}
+
+// Function to check that a number is strictly positive
+std::string checkstrictpos(const size_t &x) { return x > 0u ? "" : "must be strictly positive"; }
+
+// Check error triggered by negative number coerced to natural integer
+BOOST_AUTO_TEST_CASE(readerErrorNegativeSize) {
+
+    // Write a parameter file
+    tst::write("parameters.txt", "nloci -1");
+
+    // Create a reader
+    ReadPars reader("parameters.txt");
+
+    // Open the file
+    reader.open();
+
+    // Read the first line
+    reader.readline();
+
+    // Empty container
+    size_t nloci;
+
+    // Check that it throws an error
+    tst::checkError([&]() { reader.readvalue<size_t>(nloci, checkstrictpos); }, "Invalid value type for parameter nloci in line 1 of file parameters.txt");
+
+    // Close the file
+    reader.close();
+
+    // Remove the file
+    std::remove("parameters.txt");
+ 
+}
+
+// Check error triggered by the checking function
+BOOST_AUTO_TEST_CASE(checkerError) {
+
+    // Write a parameter file
+    tst::write("parameters.txt", "nloci 0");
+
+    // Create a reader
+    ReadPars reader("parameters.txt");
+
+    // Open the file
+    reader.open();
+
+    // Read the first line
+    reader.readline();
+
+    // Empty container
+    size_t nloci;
+
+    // Check that it throws an error
+    tst::checkError([&]() { reader.readvalue<size_t>(nloci, checkstrictpos); }, "Parameter nloci must be strictly positive in line 1 of file parameters.txt");
+
+    // Close the file
+    reader.close();
+
+    // Remove the file
+    std::remove("parameters.txt");
+ 
+}

@@ -1,9 +1,9 @@
-// Source code of the Reader class.
+// Source code of the ReadPars class.
 
-#include "reader.hpp"
+#include "readpars.hpp"
 
 // Constructor
-Reader::Reader(const std::string &filename) : 
+ReadPars::ReadPars(const std::string &filename) : 
     filename(filename),
     file(std::ifstream()),
     count(0u),
@@ -18,18 +18,18 @@ Reader::Reader(const std::string &filename) :
 }
 
 // Error messages
-std::string Reader::errorOpenFile() const { return "Unable to open file " + filename; }
-std::string Reader::errorEmptyFile() const { return "File " + filename + " is empty"; }
-std::string Reader::errorReadName() const { return "Could not read parameter name in line " + std::to_string(count) + " of file " + filename; }
-std::string Reader::errorNoValue() const { return "No value for parameter " + name + " in line " + std::to_string(count) + " of file " + filename; }
-std::string Reader::errorReadValue() const { return "Could not read value for parameter " + name + " in line " + std::to_string(count) + " of file " + filename; }
-std::string Reader::errorParseValue() const { return "Invalid value type for parameter " + name + " in line " + std::to_string(count) + " of file " + filename; }
-std::string Reader::errorTooManyValues() const { return "Too many values for parameter " + name + " in line " + std::to_string(count) + " of file " + filename; }
-std::string Reader::errorTooFewValues() const { return "Too few values for parameter " + name + " in line " + std::to_string(count) + " of file " + filename; }
-std::string Reader::errorInvalidParameter() const { return "Invalid parameter: " + name + " in line " + std::to_string(count) + " of file " + filename; }
+std::string ReadPars::errorOpenFile() const { return "Unable to open file " + filename; }
+std::string ReadPars::errorEmptyFile() const { return "File " + filename + " is empty"; }
+std::string ReadPars::errorReadName() const { return "Could not read parameter name in line " + std::to_string(count) + " of file " + filename; }
+std::string ReadPars::errorNoValue() const { return "No value for parameter " + name + " in line " + std::to_string(count) + " of file " + filename; }
+std::string ReadPars::errorReadValue() const { return "Could not read value for parameter " + name + " in line " + std::to_string(count) + " of file " + filename; }
+std::string ReadPars::errorParseValue() const { return "Invalid value type for parameter " + name + " in line " + std::to_string(count) + " of file " + filename; }
+std::string ReadPars::errorTooManyValues() const { return "Too many values for parameter " + name + " in line " + std::to_string(count) + " of file " + filename; }
+std::string ReadPars::errorTooFewValues() const { return "Too few values for parameter " + name + " in line " + std::to_string(count) + " of file " + filename; }
+std::string ReadPars::errorInvalidParameter() const { return "Invalid parameter: " + name + " in line " + std::to_string(count) + " of file " + filename; }
 
 // Function to error on invalid parameter
-void Reader::readerror() const {
+void ReadPars::readerror() const {
 
     // Throw error
     throw std::runtime_error(errorInvalidParameter());
@@ -37,7 +37,7 @@ void Reader::readerror() const {
 }
 
 // Function to format error message
-void Reader::checkerror(const std::string &error) const {
+void ReadPars::checkerror(const std::string &error) const {
 
     // error: error message to format
 
@@ -53,7 +53,7 @@ void Reader::checkerror(const std::string &error) const {
 }
 
 // Function to open the file
-void Reader::open() {
+void ReadPars::open() {
 
     // Open the file
     file.open(filename.c_str());
@@ -74,7 +74,7 @@ void Reader::open() {
 }
 
 // Function to reset a line
-void Reader::reset() {
+void ReadPars::reset() {
 
     // Reset
     empty = false;
@@ -87,7 +87,7 @@ void Reader::reset() {
 }
 
 // Function to make sure the next thing can be read
-bool Reader::readnext(std::istringstream &line, std::string &input) {
+bool ReadPars::readnext(std::istringstream &line, std::string &input) {
 
     // line: line to read from
     // input: string to read into
@@ -119,7 +119,7 @@ bool Reader::readnext(std::istringstream &line, std::string &input) {
 }
 
 // Function to read a line from the file
-void Reader::readline() {
+void ReadPars::readline() {
 
     // Check
     assert(isopen());
@@ -160,7 +160,7 @@ void Reader::readline() {
 }
 
 // Function to close the input file
-void Reader::close() {
+void ReadPars::close() {
 
     // Close
     file.close();

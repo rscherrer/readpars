@@ -15,8 +15,8 @@ In this guide we show how to modify our [main CMake setup](SETUP.md) in order to
 First, download the repository and set it as working directory if you have not already done so:
 
 ```shell
-git clone https://github.com/rscherrer/reschoice
-cd reschoice
+git clone https://github.com/rscherrer/readpars
+cd readpars
 ```
 
 ### Configure CMake
@@ -36,7 +36,7 @@ if (WIN32)
 endif()
 
 # Project name
-project(reschoice)
+project(readpars)
 
 # Git will be needed to install Boost
 find_package(Git REQUIRED)
@@ -79,10 +79,10 @@ file(GLOB_RECURSE src
 )
 
 # Instruct CMake to build the binary
-add_executable(reschoice "${CMAKE_SOURCE_DIR}/main.cpp" ${src})
+add_executable(readpars "${CMAKE_SOURCE_DIR}/main.cpp" ${src})
 
 # Place the binary into ./bin/
-set_target_properties(reschoice PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/$<0:>)
+set_target_properties(readpars PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/$<0:>)
 ```
 
 Finally, make sure that the following `CMakeLists.txt` file is saved in the `tests/` directory (this file should be already provided in the right folder within this repository):

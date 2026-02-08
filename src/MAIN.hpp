@@ -1,10 +1,11 @@
-#ifndef READER_MAIN_HPP
-#define READER_MAIN_HPP
+#ifndef READPARS_MAIN_HPP
+#define READPARS_MAIN_HPP
 
 // This is the header containing the main simulation function
 
-#include "reader.hpp"
-#include "checker.hpp"
+#include "readpars.hpp"
+
+#include <iostream>
 
 // Main simulation function
 void doMain();

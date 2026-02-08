@@ -1,5 +1,5 @@
-#ifndef READER_TESTS_TESTUTILS_HPP
-#define READER_TESTS_TESTUTILS_HPP
+#ifndef READPARS_TESTS_TESTUTILS_HPP
+#define READPARS_TESTS_TESTUTILS_HPP
 
 // This header is for the tst (test) namespace, which contains functions used in unit tests.
 

@@ -26,13 +26,12 @@ void doMain() {
     int ngenes;
     double mutrate;
     double noise;
-    char mode;
 
     // Vectors
     std::vector<double> genes;
 
     // Initialize a reader
-    Reader r("parameters.txt");
+    ReadPars r("parameters.txt");
 
     // Open the file
     r.open();
@@ -56,7 +55,6 @@ void doMain() {
         if (name == "ngenes") r.readvalue<int>(ngenes, checkstrictpos<int>);
         else if (name == "mutrate") r.readvalue<double>(mutrate, checkprop<double>);
         else if (name == "noise") r.readvalue<double>(noise, checkpositive<double>);
-        else if (name == "mode") r.readvalue<char>(mode);
         else if (name == "genes") r.readvalues<double>(genes, ngenes, checkstrictpos<double>);
         else
             r.readerror();
@@ -64,5 +62,15 @@ void doMain() {
         // Note: Remember to indicate the type of the input when calling the checking function,
         // if the checking function is templated (as it is here).
 
-    }	
+    }
+
+    // Verbose
+    std::cout << "Input read in successfully:\n";
+    std::cout << "ngenes: " << ngenes << '\n';
+    std::cout << "mutrate: " << mutrate << '\n';
+    std::cout << "noise: " << noise << '\n';
+    std::cout << "genes:";
+    for (double x : genes) std::cout << ' ' << x;
+    std::cout << '\n';
+    
 }

@@ -38,7 +38,7 @@ echo "Created parameter file: $PARAM_FILE"
 SECONDS=0
 
 # Run the program with the parameter file to generate gmon.out
-./reschoice "$PARAM_FILE"
+./readpars "$PARAM_FILE"
 
 # Stop the timer and print the elapsed time
 ELAPSED_TIME=$SECONDS
@@ -48,7 +48,7 @@ echo "Program execution time: $ELAPSED_TIME seconds"
 mv gmon.out "../$GPROF_DIR/"
 
 # Generate the profiling report and save it in the gprof directory
-gprof reschoice "../$GPROF_DIR/gmon.out" > "../$GPROF_DIR/report.txt"
+gprof readpars "../$GPROF_DIR/gmon.out" > "../$GPROF_DIR/report.txt"
 
 # Display the profiling report
 less "../$GPROF_DIR/report.txt"

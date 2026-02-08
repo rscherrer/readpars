@@ -7,7 +7,7 @@ file(GLOB_RECURSE src
 )
 
 # Instruct CMake to build the binary
-add_executable(reschoice "${CMAKE_SOURCE_DIR}/main.cpp" ${src})
+add_executable(readpars "${CMAKE_SOURCE_DIR}/main.cpp" ${src})
 
 # Place the binary into ./bin/
-set_target_properties(reschoice PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/$<0:>)
+set_target_properties(readpars PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/$<0:>)

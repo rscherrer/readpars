@@ -1,7 +1,10 @@
-#ifndef READER_READER_HPP
-#define READER_READER_HPP
+#ifndef READPARS_READPARS_HPP
+#define READPARS_READPARS_HPP
 
-// This header contains the Reader class.
+// This header contains the ReadPars class.
+
+// Note: Some functions in this header could be made in such a way
+// that they can be called from other scripts, e.g. from a name space.
 
 #include <string>
 #include <sstream>
@@ -9,13 +12,14 @@
 #include <vector>
 #include <cassert>
 #include <functional>
+#include <cmath>
 
-class Reader {
+class ReadPars {
 
 public:
 
     // Constructor
-    Reader(const std::string&);
+    ReadPars(const std::string&);
 
     // Setters
     void open();
@@ -169,12 +173,45 @@ private:
         // Prepare to store the value
         std::istringstream stream(temp);
 
+        // Prepare receptacle for the value
+        double x;
+
         // Prepare to capture leftover characters 
         char leftover;
 
         // Read the value and check
-        if (!(stream >> value) || (stream >> leftover))
+        if (!(stream >> x) || (stream >> leftover))
             throw std::runtime_error(errorParseValue());
+
+        // Special check for integers
+        if (std::is_integral_v<T>)
+            if (!std::isfinite(x) || std::floor(x) != x)
+                throw std::runtime_error(errorParseValue());
+
+        // Special check for unsigned integers
+        if (std::is_unsigned_v<T>)
+            if (x < 0.0)
+                throw std::runtime_error(errorParseValue());
+
+        // Note: Negative numbers can be read without problem into an unsigned integer, but
+        // will be converted to very large numbers. To catch that issue, we first read into
+        // double, check that the number is positive, and then convert into unsigned.
+
+        // Special check for booleans
+        if (std::is_same_v<T, bool>)
+            if (x > 1.0)
+                throw std::runtime_error(errorParseValue());
+
+        // Note: Similarly, coercing into a boolean does not return an error when the input
+        // is a positive number above one. Hence the extra check. Note that the above checks
+        // for integers will also have been run for the boolean case.
+
+        // Final value
+        value = static_cast<T>(x);
+
+        // TODO: Make it work for strings too
+        // TODO: Make it work for vectors of strings
+        // TODO: Character type?
 
         // Check validity
         std::string error = check ? check(value) : "";

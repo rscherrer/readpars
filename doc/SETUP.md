@@ -13,13 +13,13 @@ In this guide we show how to build the program using the [CMake](https://cmake.o
 You can download the source code using `git`:
 
 ```shell
-git clone https://github.com/rscherrer/reschoice
+git clone https://github.com/rscherrer/readpars
 ```
 
 Make sure you run the following commands from within the root directory of the repo by using:
 
 ```bash
-cd reschoice
+cd readpars
 ```
 
 ### Configure CMake
@@ -33,7 +33,7 @@ Our setup uses the following `CMakeLists.txt` configuration file, which you can 
 cmake_minimum_required(VERSION 3.16)
 
 # Project name
-project(reschoice)
+project(readpars)
 
 # C++ standard
 set(CMAKE_CXX_STANDARD 20)
@@ -62,10 +62,10 @@ file(GLOB_RECURSE src
 )
 
 # Instruct CMake to build the binary
-add_executable(reschoice "${CMAKE_SOURCE_DIR}/main.cpp" ${src})
+add_executable(readpars "${CMAKE_SOURCE_DIR}/main.cpp" ${src})
 
 # Place the binary into ./bin/
-set_target_properties(reschoice PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/$<0:>)
+set_target_properties(readpars PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/$<0:>)
 ```
 
 ### Build the program
